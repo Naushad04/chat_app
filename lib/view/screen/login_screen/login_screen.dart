@@ -1,5 +1,6 @@
-import 'package:chat_app/main.dart';
+import 'package:chat_app/controller/auth_controller.dart';
 import 'package:chat_app/view/screen/login_screen/login_screen_widget.dart';
+import 'package:chat_app/view/screen/registration_screen/registration_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,6 +14,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     var view = LoginScreenWidget();
@@ -39,12 +42,45 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(color:Colors.blue, fontSize: 30, fontWeight: FontWeight.w700),
                   ),
                   SizedBox(height: 35),
-                  view.textFiled(hint: 'Email'),
+                  view.textFiled(hint: 'Email', controller: emailController),
                   SizedBox(height: 16),
-                  view.passwordTextField(hint: 'Password', obscureText: obscureText),
+                  view.passwordTextField(hint: 'Password', obscureText: obscureText, controller: passwordController),
                   SizedBox(height: 45),
                   view.loginButton(
                     onPressed: (){
+                      if(emailController.text.isEmpty){
+                        Get.snackbar(
+                          'Please enter your name',
+                          '',
+                          barBlur: 1.0,
+                          backgroundColor: Colors.blue,
+                          colorText: Colors.white,
+                          shouldIconPulse: true,
+                          icon: Icon(Icons.error_outline_outlined, color: Colors.red,),
+                          overlayBlur: 1.0,
+                          animationDuration: Duration(seconds: 1),
+                          forwardAnimationCurve: Curves.bounceInOut,
+                          reverseAnimationCurve: Curves.easeInOutBack,
+                        );
+                      }
+                      else if(passwordController.text.isEmpty){
+                        Get.snackbar(
+                          'Please enter your password',
+                          '',
+                          barBlur: 1.0,
+                          backgroundColor: Colors.blue,
+                          colorText: Colors.white,
+                          shouldIconPulse: true,
+                          icon: Icon(Icons.error_outline_outlined, color: Colors.red,),
+                          overlayBlur: 1.0,
+                          animationDuration: Duration(seconds: 1),
+                          forwardAnimationCurve: Curves.bounceInOut,
+                          reverseAnimationCurve: Curves.easeInOutBack,
+                        );
+                      }
+                      else{
+                        AuthController().login(emailController.text.toString(), passwordController.text.toString());
+                      }
 
                     },
                     text: 'Login'
@@ -55,10 +91,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       Text('Already have an account?'),
                       TextButton(
                         onPressed: () {
-                          Get.back();
+                          Get.to(
+                              RegistrationScreen(),
+                              transition: Transition.fade,
+                              duration: const Duration(milliseconds: 800),
+                              curve: Curves.bounceOut
+                          );
                         },
                         child: Text(
-                          'Login',
+                          'Sign up',
                           style: TextStyle(color: Colors.blueAccent),
                         ),
                       ),

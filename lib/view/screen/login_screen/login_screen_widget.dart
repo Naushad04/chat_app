@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 class LoginScreenWidget{
 
 
-  Widget textFiled({required String hint}){
+  Widget textFiled({required String hint, required TextEditingController controller}){
     return  TextFormField(
+      controller: controller,
       decoration: InputDecoration(
         hintText: hint,
         filled: true,
@@ -18,24 +19,32 @@ class LoginScreenWidget{
     );
   }
 
-  Widget passwordTextField({required String hint, required bool obscureText}){
-    return  TextFormField(
-      obscureText: obscureText,
-      decoration: InputDecoration(
-        hintText: 'Confirm Password',
-        filled: true,
-        fillColor: Colors.grey.shade200,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: BorderSide.none,
-        ),
-        suffixIcon: IconButton(
-          icon: Icon(Icons.visibility_off),
-          onPressed: () {
+  Widget passwordTextField({required String hint, required bool obscureText, required TextEditingController controller}){
+    return  StatefulBuilder(
+      builder: (context, setState) {
+        return  TextFormField(
+          controller: controller,
+          obscureText: obscureText,
+          decoration: InputDecoration(
+            hintText: hint,
+            filled: true,
+            fillColor: Colors.grey.shade200,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30),
+              borderSide: BorderSide.none,
+            ),
+            suffixIcon: IconButton(
+              icon: Icon((obscureText ? Icons.visibility_off : Icons.visibility)),
+              onPressed: () {
+                setState((){
+                  obscureText = !obscureText;
+                });
+              },
+            ),
+          ),
+        );
+      },
 
-          },
-        ),
-      ),
     );
   }
 
